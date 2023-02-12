@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import { connect } from "mongoose";
-import authRouter from "./routes/authRouter";
+import authRouter from "./routes/auth.router";
 
 const PASS = "dx11m2wt159cod2";
 const app: Application = express();
