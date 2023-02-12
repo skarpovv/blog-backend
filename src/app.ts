@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import { connect } from "mongoose";
 import authRouter from "./routes/auth.router";
 
+
 const PASS = "123123123123";
 
 const app: Application = express();
