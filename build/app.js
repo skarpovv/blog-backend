@@ -14,9 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
-const PASS = "dx11m2wt159cod2";
+const auth_router_1 = __importDefault(require("./routes/auth.router"));
+const PASS = "123123123123";
 const app = (0, express_1.default)();
 const PORT = 3001;
+app.use(express_1.default.json());
+app.use("/auth", auth_router_1.default);
 app.use("/", (req, res) => {
     res.send("Hello world!");
 });
@@ -31,4 +34,5 @@ const start = () => __awaiter(void 0, void 0, void 0, function* () {
         console.error(e);
     }
 });
+console.log("12312");
 start();
