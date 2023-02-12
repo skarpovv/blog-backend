@@ -2,7 +2,7 @@ import express, { Application, Request, Response } from "express";
 import { connect } from "mongoose";
 import authRouter from "./routes/auth.router";
 
-const PASS = "dx11m2wt159cod2";
+const PASS = "123123123123";
 const app: Application = express();
 
 const PORT: number = 3001;
