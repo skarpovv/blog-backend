@@ -13,23 +13,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authController = void 0;
+const user_model_1 = __importDefault(require("../models/user.model"));
+const role_model_1 = __importDefault(require("../models/role.model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const express_validator_1 = require("express-validator");
 class AuthController {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // const { username, password } = req.body;
-                // const isExistUser = await userModel.findOne({ username });
-                // if (isExistUser) {
-                //   res.status(400).json({ message: `User ${username} already exist` });
-                // }
-                // const user = new userModel({
-                //   username,
-                //   password: this._passwordHash(password),
-                // });
-                // return res.json();
+                const validationErrors = (0, express_validator_1.validationResult)(req);
+                if (!validationErrors.isEmpty()) {
+                    return res
+                        .status(400)
+                        .json({ message: "Validation Error", validationErrors });
+                }
+                const { username, password } = req.body;
+                console.log(username, password);
+                const isExistUser = yield user_model_1.default.findOne({ username });
+                console.log(isExistUser);
+                if (isExistUser) {
+                    return res
+                        .status(400)
+                        .json({ message: `User ${username} already exist` });
+                }
+                const userRole = yield role_model_1.default.findOne({ value: "USER" });
+                console.log(userRole);
+                // const hashPassword = bcrypt.hashSync(password, 7);
+                const user = new user_model_1.default({
+                    username: username,
+                    password: this._passwordHash(password),
+                    roles: [userRole === null || userRole === void 0 ? void 0 : userRole.value],
+                });
+                console.log("User: ", user);
+                yield user.save();
+                return res.json({ message: "User created" });
             }
             catch (e) {
+                console.log(e);
                 res.status(400).json({ message: "Registration Error" });
             }
         });
