@@ -1,13 +1,12 @@
 import { Schema, model } from "mongoose";
-import { IRole } from "./role.model";
 
 export interface IUser {
   username: string;
   password: string;
-  roles: IRole[];
+  roles: string;
 }
 
-const User = new Schema({
+const User = new Schema<IUser>({
   username: { type: String, unique: true, requied: true },
   password: { type: String, required: true },
   roles: [{ type: String, ref: "Role" }],

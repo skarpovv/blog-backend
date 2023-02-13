@@ -1,7 +1,8 @@
 import express, { Application, Request, Response } from "express";
-import { connect } from "mongoose";
+import mongoose, { connect } from "mongoose";
 import authRouter from "./routes/auth.router";
 
+mongoose.set("strictQuery", false);
 
 const PASS = "123123123123";
 
