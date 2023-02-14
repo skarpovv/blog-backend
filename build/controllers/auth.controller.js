@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authController = void 0;
-const user_model_1 = __importDefault(require("../models/user.model"));
-const role_model_1 = __importDefault(require("../models/role.model"));
+const user_model_1 = require("../models/user.model");
+const role_model_1 = require("../models/role.model");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const express_validator_1 = require("express-validator");
 class AuthController {
@@ -25,32 +25,29 @@ class AuthController {
                 if (!validationErrors.isEmpty()) {
                     return res
                         .status(400)
-                        .json({ message: "Validation Error", validationErrors });
+                        .json({ message: 'Validation Error', validationErrors });
                 }
-                const { username, password } = req.body;
-                console.log(username, password);
-                const isExistUser = yield user_model_1.default.findOne({ username });
-                console.log(isExistUser);
+                const { username, password, email, fullName } = req.body;
+                const isExistUser = yield user_model_1.User.findOne({ username });
                 if (isExistUser) {
                     return res
                         .status(400)
                         .json({ message: `User ${username} already exist` });
                 }
-                const userRole = yield role_model_1.default.findOne({ value: "USER" });
-                console.log(userRole);
-                // const hashPassword = bcrypt.hashSync(password, 7);
-                const user = new user_model_1.default({
-                    username: username,
+                const userRole = yield role_model_1.Role.findOne({ value: 'USER' });
+                const user = new user_model_1.User({
+                    username,
+                    email,
+                    fullName,
                     password: this._passwordHash(password),
                     roles: [userRole === null || userRole === void 0 ? void 0 : userRole.value],
                 });
-                console.log("User: ", user);
                 yield user.save();
-                return res.json({ message: "User created" });
+                return res.json(user);
             }
             catch (e) {
                 console.log(e);
-                res.status(400).json({ message: "Registration Error" });
+                res.status(400).json({ message: 'Registration Error' });
             }
         });
     }
@@ -59,14 +56,14 @@ class AuthController {
             try {
             }
             catch (error) {
-                res.status(400).json({ message: "Login Error" });
+                res.status(400).json({ message: 'Login Error' });
             }
         });
     }
     getUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                res.json("Server Works");
+                res.json('Server Works');
             }
             catch (error) { }
         });
