@@ -54,20 +54,32 @@ class AuthController {
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const validationErrors = (0, express_validator_1.validationResult)(req);
+                if (!validationErrors.isEmpty()) {
+                    return res
+                        .status(400)
+                        .json({ message: 'Validation Errors', errors: validationErrors });
+                }
+                const { login, password } = req.body;
+                const dbUser = yield user_model_1.User.findOne({
+                    $or: [{ username: login }, { email: login }],
+                });
+                if (!dbUser)
+                    return res.status(400).json({ messgae: 'User not exist' });
+                if (!bcryptjs_1.default.compareSync(password, dbUser.password))
+                    return res.status(400).json({ message: 'Password incorrect' });
+                return res.json({ message: 'Login succesfull' });
             }
             catch (error) {
                 res.status(400).json({ message: 'Login Error' });
             }
         });
     }
-    getUsers(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                res.json('Server Works');
-            }
-            catch (error) { }
-        });
-    }
+    // async getUsers(req: Request, res: Response) {
+    //   try {
+    //     res.json('Server Works');
+    //   } catch (error) {}
+    // }
     _passwordHash(password) {
         return bcryptjs_1.default.hashSync(password, 7);
     }
