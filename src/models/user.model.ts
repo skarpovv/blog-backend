@@ -8,7 +8,7 @@ export interface IUser {
   roles: string[];
 }
 
-const User = new Schema<IUser>({
+const userSchema = new Schema<IUser>({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },
@@ -16,4 +16,4 @@ const User = new Schema<IUser>({
   roles: [{ type: String, ref: 'Role' }],
 });
 
-export default model('User', User);
+export const User = model('User', userSchema);

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import userModel from '../models/user.model';
-import roleModel from '../models/role.model';
+import { User } from '../models/user.model';
+import { Role } from '../models/role.model';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
 
@@ -15,22 +15,18 @@ class AuthController {
       }
 
       const { username, password, email, fullName } = req.body;
-      console.log(username, password);
-      const isExistUser = await userModel.findOne({ username });
 
-      console.log(isExistUser);
+      const isExistUser = await User.findOne({ username });
+
       if (isExistUser) {
         return res
           .status(400)
           .json({ message: `User ${username} already exist` });
       }
 
-      const userRole = await roleModel.findOne({ value: 'USER' });
+      const userRole = await Role.findOne({ value: 'USER' });
 
-      console.log(userRole);
-
-      // const hashPassword = bcrypt.hashSync(password, 7);
-      const user = new userModel({
+      const user = new User({
         username,
         email,
         fullName,
@@ -38,11 +34,9 @@ class AuthController {
         roles: [userRole?.value],
       });
 
-      console.log('User: ', user);
-
       await user.save();
 
-      return res.json({ message: 'User created' });
+      return res.json(user);
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: 'Registration Error' });
