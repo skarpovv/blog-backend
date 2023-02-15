@@ -80,6 +80,16 @@ class AuthController {
     //     res.json('Server Works');
     //   } catch (error) {}
     // }
+    test(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                res.json('Server Works!');
+            }
+            catch (error) {
+                res.json(error);
+            }
+        });
+    }
     _passwordHash(password) {
         return bcryptjs_1.default.hashSync(password, 7);
     }
