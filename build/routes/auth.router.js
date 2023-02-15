@@ -7,5 +7,5 @@ const login_validators_1 = require("./validation/auth/login.validators");
 const router = (0, express_1.Router)();
 router.post('/register', validation_1.registerValidators, auth_controller_1.authController.register.bind(auth_controller_1.authController));
 router.post('/login', login_validators_1.loginValidators, auth_controller_1.authController.login.bind(auth_controller_1.authController));
-// router.get('/users', authController.getUsers.bind(authController));
+router.get('/test', auth_controller_1.authController.test.bind(auth_controller_1.authController));
 exports.default = router;

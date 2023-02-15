@@ -75,6 +75,14 @@ class AuthController {
   //   } catch (error) {}
   // }
 
+  async test(req: Request, res: Response) {
+    try {
+      res.json('Server Works!');
+    } catch (error) {
+      res.json(error);
+    }
+  }
+
   private _passwordHash(password: string) {
     return bcrypt.hashSync(password, 7);
   }

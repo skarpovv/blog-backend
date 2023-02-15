@@ -16,6 +16,6 @@ router.post(
   loginValidators,
   authController.login.bind(authController)
 );
-// router.get('/users', authController.getUsers.bind(authController));
+router.get('/test', authController.test.bind(authController));
 
 export default router;
