@@ -38,25 +38,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importStar(require("mongoose"));
 const auth_router_1 = __importDefault(require("./routes/auth.router"));
-mongoose_1.default.set("strictQuery", false);
-const PASS = "123123123123";
+const cors_1 = __importDefault(require("cors"));
+mongoose_1.default.set('strictQuery', false);
+const PASS = '123123123123';
 const app = (0, express_1.default)();
 const PORT = 3001;
+app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use("/auth", auth_router_1.default);
-app.use("/", (req, res) => {
-    res.send("Hello world!");
+app.use('/auth', auth_router_1.default);
+app.use('/', (req, res) => {
+    res.send('Hello world!');
 });
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, mongoose_1.connect)(`mongodb+srv://skarpovv:${PASS}@blog.uhiegp3.mongodb.net/?retryWrites=true&w=majority`);
         app.listen(PORT, () => {
-            console.log("SERVER IS UP ON PORT:", PORT);
+            console.log('SERVER IS UP ON PORT:', PORT);
         });
     }
     catch (e) {
         console.error(e);
     }
 });
-console.log("12312");
+console.log('12312');
 start();

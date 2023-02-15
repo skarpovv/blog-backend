@@ -1,20 +1,22 @@
-import express, { Application, Request, Response } from "express";
-import mongoose, { connect } from "mongoose";
-import authRouter from "./routes/auth.router";
+import express, { Application, Request, Response } from 'express';
+import mongoose, { connect } from 'mongoose';
+import authRouter from './routes/auth.router';
+import cors from 'cors';
 
-mongoose.set("strictQuery", false);
+mongoose.set('strictQuery', false);
 
-const PASS = "123123123123";
+const PASS = '123123123123';
 
 const app: Application = express();
 
 const PORT: number = 3001;
 
+app.use(cors());
 app.use(express.json());
-app.use("/auth", authRouter);
+app.use('/auth', authRouter);
 
-app.use("/", (req: Request, res: Response): void => {
-  res.send("Hello world!");
+app.use('/', (req: Request, res: Response): void => {
+  res.send('Hello world!');
 });
 
 const start = async () => {
@@ -23,13 +25,13 @@ const start = async () => {
       `mongodb+srv://skarpovv:${PASS}@blog.uhiegp3.mongodb.net/?retryWrites=true&w=majority`
     );
     app.listen(PORT, (): void => {
-      console.log("SERVER IS UP ON PORT:", PORT);
+      console.log('SERVER IS UP ON PORT:', PORT);
     });
   } catch (e) {
     console.error(e);
   }
 };
 
-console.log("12312");
+console.log('12312');
 
 start();
