@@ -17,6 +17,16 @@ const user_model_1 = require("../models/user.model");
 const role_model_1 = require("../models/role.model");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const express_validator_1 = require("express-validator");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const generateJwtToken = (id, roles) => {
+    const payload = {
+        id,
+        roles,
+    };
+    return jsonwebtoken_1.default.sign(payload, process.env.SECRET_KEY, {
+        expiresIn: '24h',
+    });
+};
 class AuthController {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -34,7 +44,7 @@ class AuthController {
                         .status(400)
                         .json({ message: `User ${username} already exist` });
                 }
-                const userRole = yield role_model_1.Role.findOne({ value: 'USER' });
+                const userRole = yield role_model_1.Role.findOne({ value: role_model_1.IRole.User });
                 const user = new user_model_1.User({
                     username,
                     email,
@@ -68,7 +78,8 @@ class AuthController {
                     return res.status(400).json({ messgae: 'User not exist' });
                 if (!bcryptjs_1.default.compareSync(password, dbUser.password))
                     return res.status(400).json({ message: 'Password incorrect' });
-                return res.json({ message: 'Login succesfull' });
+                const token = generateJwtToken(dbUser._id.toString(), dbUser.roles);
+                return res.json({ token });
             }
             catch (error) {
                 res.status(400).json({ message: 'Login Error' });
