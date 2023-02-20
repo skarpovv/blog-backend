@@ -1,8 +1,20 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user.model';
-import { Role } from '../models/role.model';
+import { IRole, Role } from '../models/role.model';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
+
+const generateJwtToken = (id: string, roles: IRole[]) => {
+  const payload = {
+    id,
+    roles,
+  };
+
+  return jwt.sign(payload, <string>process.env.SECRET_KEY, {
+    expiresIn: '24h',
+  });
+};
 
 class AuthController {
   async register(req: Request, res: Response) {
@@ -24,7 +36,7 @@ class AuthController {
           .json({ message: `User ${username} already exist` });
       }
 
-      const userRole = await Role.findOne({ value: 'USER' });
+      const userRole = await Role.findOne({ value: IRole.User });
 
       const user = new User({
         username,
@@ -63,7 +75,9 @@ class AuthController {
       if (!bcrypt.compareSync(password, dbUser.password))
         return res.status(400).json({ message: 'Password incorrect' });
 
-      return res.json({ message: 'Login succesfull' });
+      const token = generateJwtToken(dbUser._id.toString(), dbUser.roles);
+
+      return res.json({ token });
     } catch (error) {
       res.status(400).json({ message: 'Login Error' });
     }

@@ -2,10 +2,10 @@ import express, { Application, Request, Response } from 'express';
 import mongoose, { connect } from 'mongoose';
 import authRouter from './routes/auth.router';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
 mongoose.set('strictQuery', false);
-
-const PASS = '123123123123';
 
 const app: Application = express();
 
@@ -22,7 +22,7 @@ app.use('/', (req: Request, res: Response): void => {
 const start = async () => {
   try {
     await connect(
-      `mongodb+srv://skarpovv:${PASS}@blog.uhiegp3.mongodb.net/?retryWrites=true&w=majority`
+      `mongodb+srv://skarpovv:${process.env.DB_KEY}@blog.uhiegp3.mongodb.net/?retryWrites=true&w=majority`
     );
     app.listen(PORT, (): void => {
       console.log('SERVER IS UP ON PORT:', PORT);
@@ -31,7 +31,5 @@ const start = async () => {
     console.error(e);
   }
 };
-
-console.log('12312');
 
 start();

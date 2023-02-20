@@ -1,7 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Role = void 0;
+exports.Role = exports.IRole = void 0;
 const mongoose_1 = require("mongoose");
+var IRole;
+(function (IRole) {
+    IRole["User"] = "USER";
+    IRole["Admin"] = "ADMIN";
+})(IRole = exports.IRole || (exports.IRole = {}));
 const roleSchema = new mongoose_1.Schema({
     value: { type: String, unique: true, default: 'USER' },
 });
