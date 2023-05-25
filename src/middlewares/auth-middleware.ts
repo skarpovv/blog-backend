@@ -7,6 +7,11 @@ export default function (req: any, res: Response, next: NextFunction) {
     next();
   }
 
+  if (req.path === '/login' || req.path === '/register') {
+    next();
+    return;
+  }
+
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
