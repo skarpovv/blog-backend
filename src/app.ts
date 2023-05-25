@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import mongoose, { connect } from 'mongoose';
 import authRouter from './routes/auth.router';
+import blogRouter from './routes/blog.router';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -14,10 +15,7 @@ const PORT: number = 3001;
 app.use(cors());
 app.use(express.json());
 app.use('/auth', authRouter);
-
-app.use('/', (req: Request, res: Response): void => {
-  res.send('Hello world!');
-});
+app.use('/blogs', blogRouter);
 
 const start = async () => {
   try {

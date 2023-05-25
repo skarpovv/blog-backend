@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importStar(require("mongoose"));
 const auth_router_1 = __importDefault(require("./routes/auth.router"));
+const blog_router_1 = __importDefault(require("./routes/blog.router"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -47,9 +48,7 @@ const PORT = 3001;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use('/auth', auth_router_1.default);
-app.use('/', (req, res) => {
-    res.send('Hello world!');
-});
+app.use('/blogs', blog_router_1.default);
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, mongoose_1.connect)(`mongodb+srv://skarpovv:${process.env.DB_KEY}@blog.uhiegp3.mongodb.net/?retryWrites=true&w=majority`);
