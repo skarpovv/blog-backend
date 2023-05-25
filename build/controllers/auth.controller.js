@@ -42,7 +42,7 @@ class AuthController {
                 if (isExistUser) {
                     return res
                         .status(400)
-                        .json({ message: `User ${username} already exist` });
+                        .json({ message: `User ${username} already exists` });
                 }
                 const userRole = yield role_model_1.Role.findOne({ value: role_model_1.IRole.User });
                 const user = new user_model_1.User({
@@ -53,7 +53,8 @@ class AuthController {
                     roles: [userRole === null || userRole === void 0 ? void 0 : userRole.value],
                 });
                 yield user.save();
-                return res.json(user);
+                const token = generateJwtToken(user._id.toString(), user.roles);
+                return res.json({ token });
             }
             catch (e) {
                 console.log(e);
@@ -75,7 +76,7 @@ class AuthController {
                     $or: [{ username: login }, { email: login }],
                 });
                 if (!dbUser)
-                    return res.status(400).json({ messgae: 'User not exist' });
+                    return res.status(400).json({ message: 'User not found' });
                 if (!bcryptjs_1.default.compareSync(password, dbUser.password))
                     return res.status(400).json({ message: 'Password incorrect' });
                 const token = generateJwtToken(dbUser._id.toString(), dbUser.roles);
@@ -86,11 +87,6 @@ class AuthController {
             }
         });
     }
-    // async getUsers(req: Request, res: Response) {
-    //   try {
-    //     res.json('Server Works');
-    //   } catch (error) {}
-    // }
     test(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
