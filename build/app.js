@@ -41,14 +41,18 @@ const auth_router_1 = __importDefault(require("./routes/auth.router"));
 const blog_router_1 = __importDefault(require("./routes/blog.router"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const users_router_1 = __importDefault(require("./routes/users.router"));
+const auth_middleware_1 = __importDefault(require("./middlewares/auth-middleware"));
 dotenv_1.default.config();
 mongoose_1.default.set('strictQuery', false);
 const app = (0, express_1.default)();
 const PORT = 3001;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+app.use(auth_middleware_1.default);
 app.use('/auth', auth_router_1.default);
 app.use('/blogs', blog_router_1.default);
+app.use('/users', users_router_1.default);
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, mongoose_1.connect)(`mongodb+srv://skarpovv:${process.env.DB_KEY}@blog.uhiegp3.mongodb.net/?retryWrites=true&w=majority`);

@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogController = void 0;
 const blog_model_1 = require("../models/blog.model");
-const user_model_1 = require("../models/user.model");
 class BlogController {
     createBlog(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -57,24 +56,6 @@ class BlogController {
             catch (error) {
                 console.log(error);
                 res.status(400).json({ message: 'Error fetching blog' });
-            }
-        });
-    }
-    searchUsers(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { query } = req.query;
-                const users = yield user_model_1.User.find({
-                    $or: [
-                        { username: { $regex: query, $options: 'i' } },
-                        { email: { $regex: query, $options: 'i' } },
-                    ],
-                });
-                return res.json(users);
-            }
-            catch (error) {
-                console.log(error);
-                res.status(400).json({ message: 'Error searching users' });
             }
         });
     }

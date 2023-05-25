@@ -12,7 +12,6 @@ router.put('/blogs/:id', validation_1.createBlogValidators, blog_controller_1.bl
 router.delete('/blogs/:id', blog_controller_1.blogController.deleteBlog.bind(blog_controller_1.blogController));
 router.get('/blogs/:id/comments', comment_controller_1.commentController.getCommentsByBlog.bind(comment_controller_1.commentController));
 router.post('/comments', comment_controller_1.commentController.createComment.bind(comment_controller_1.commentController));
-router.get('/users/search', blog_controller_1.blogController.searchUsers.bind(blog_controller_1.blogController));
 router.get('/blogs/search', blog_controller_1.blogController.searchBlogs.bind(blog_controller_1.blogController));
 router.put('/comments/:id', comment_controller_1.commentController.updateComment.bind(comment_controller_1.commentController));
 router.delete('/comments/:id', comment_controller_1.commentController.deleteComment.bind(comment_controller_1.commentController));
