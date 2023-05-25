@@ -7,7 +7,7 @@ export default function (req: any, res: Response, next: NextFunction) {
     next();
   }
 
-  if (req.path === '/login' || req.path === '/register') {
+  if (req.path === '/auth/login' || req.path === '/auth/register') {
     next();
     return;
   }

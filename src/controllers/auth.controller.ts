@@ -33,7 +33,7 @@ class AuthController {
       if (isExistUser) {
         return res
           .status(400)
-          .json({ message: `User ${username} already exists` });
+          .json({ message: `User ${username} already exist` });
       }
 
       const userRole = await Role.findOne({ value: IRole.User });
@@ -48,9 +48,7 @@ class AuthController {
 
       await user.save();
 
-      const token = generateJwtToken(user._id.toString(), user.roles);
-
-      return res.json({ token });
+      return res.json(user);
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: 'Registration Error' });
@@ -72,7 +70,7 @@ class AuthController {
         $or: [{ username: login }, { email: login }],
       });
 
-      if (!dbUser) return res.status(400).json({ message: 'User not found' });
+      if (!dbUser) return res.status(400).json({ messgae: 'User not exist' });
 
       if (!bcrypt.compareSync(password, dbUser.password))
         return res.status(400).json({ message: 'Password incorrect' });
@@ -85,6 +83,12 @@ class AuthController {
     }
   }
 
+  // async getUsers(req: Request, res: Response) {
+  //   try {
+  //     res.json('Server Works');
+  //   } catch (error) {}
+  // }
+
   async test(req: Request, res: Response) {
     try {
       res.json('Server Works!');
@@ -96,6 +100,10 @@ class AuthController {
   private _passwordHash(password: string) {
     return bcrypt.hashSync(password, 7);
   }
+
+  // private async _getUserRole(role: string) {
+  //   return await roleModel.findOne({ value: "USER" });
+  // }
 }
 
 export const authController = new AuthController();
