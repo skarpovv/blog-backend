@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user.model';
+import { Blog } from '../models/blog.model';
 
 class UserController {
   async getUsers(req: Request, res: Response) {
@@ -37,6 +38,19 @@ class UserController {
       res.json(users);
     } catch (error) {
       res.status(500).json({ message: 'Failed to search users' });
+    }
+  }
+
+  async getUserBlogs(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+
+      const blogs = await Blog.find({ author: userId });
+
+      return res.json(blogs);
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ message: 'Error fetching user blogs' });
     }
   }
 }

@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userController = void 0;
 const user_model_1 = require("../models/user.model");
+const blog_model_1 = require("../models/blog.model");
 class UserController {
     getUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -53,6 +54,19 @@ class UserController {
             }
             catch (error) {
                 res.status(500).json({ message: 'Failed to search users' });
+            }
+        });
+    }
+    getUserBlogs(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { userId } = req.params;
+                const blogs = yield blog_model_1.Blog.find({ author: userId });
+                return res.json(blogs);
+            }
+            catch (error) {
+                console.log(error);
+                res.status(400).json({ message: 'Error fetching user blogs' });
             }
         });
     }
