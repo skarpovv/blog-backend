@@ -1,23 +1,33 @@
-import { env } from "process";
-import { Response } from 'express';
+import { Response, NextFunction } from 'express';
+import { Secret, verify, VerifyErrors } from 'jsonwebtoken';
 
-import { Secret, verify } from "jsonwebtoken";
+export default function (req: any, res: Response, next: NextFunction) {
+  if (req.method === 'OPTIONS') {
+    // Allow preflight requests to pass
+    next();
+  }
 
-export default function (req: any, res: Response, next: any) {
-    if (req.method === "OPTIONS") {
-        next()
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(403).json({ message: 'Not authorized' });
     }
 
-    try {
-        const token = req?.headers?.authorization?.split(' ')[1]
-        if (!token) {
-            return res.status(403).json({message: "Not autorized"})
+    verify(
+      token,
+      process.env.SECRET_KEY as Secret,
+      (error: VerifyErrors | null, decodedData: any) => {
+        if (error) {
+          console.log(error);
+          return res.status(403).json({ message: 'Not authorized' });
         }
-        const decodedData = verify(token, process.env.SECRET_KEY as Secret);
-        req.user = decodedData
-        next()
-    } catch (e) {
-        console.log(e)
-        return res.status(403).json({message: "Not autorized"})
-    }
-};
+
+        req.user = decodedData;
+        next();
+      }
+    );
+  } catch (e) {
+    console.log(e);
+    return res.status(403).json({ message: 'Not authorized' });
+  }
+}

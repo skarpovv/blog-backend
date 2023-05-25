@@ -51,24 +51,6 @@ class BlogController {
     }
   }
 
-  async searchUsers(req: Request, res: Response) {
-    try {
-      const { query } = req.query;
-
-      const users = await User.find({
-        $or: [
-          { username: { $regex: query, $options: 'i' } },
-          { email: { $regex: query, $options: 'i' } },
-        ],
-      });
-
-      return res.json(users);
-    } catch (error) {
-      console.log(error);
-      res.status(400).json({ message: 'Error searching users' });
-    }
-  }
-
   async searchBlogs(req: Request, res: Response) {
     try {
       const { query } = req.query;
@@ -124,7 +106,6 @@ class BlogController {
       res.status(400).json({ message: 'Error deleting blog' });
     }
   }
-
 }
 
 export const blogController = new BlogController();
